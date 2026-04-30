@@ -16,7 +16,7 @@ const cards = [
     icon: "◉",
     title: "Usuário no ",
     accent: "centro",
-    text: "Interface bonita que confunde é produto ruim. Eu projeto para quem vai usar - não para quem vai ver o screenshot.",
+    text: "Interface bonita que confunde é produto ruim. Eu projeto para quem vai usar — não para quem vai ver o screenshot.",
   },
   {
     number: "03",
@@ -32,7 +32,7 @@ const container: Variants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.16 },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.14 },
   },
 };
 
@@ -48,49 +48,52 @@ const item: Variants = {
 export default function ComoEuPenso() {
   return (
     <section className="section-shell bg-[var(--surface)]">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.12 }}
-      >
-        <p className="section-label">Como eu penso</p>
-        <h2 className="headline mt-4 text-4xl md:text-6xl">
-          Estratégia antes
-          <br />
-          de <em>execução.</em>
-        </h2>
-      </motion.div>
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.12 }}
+        >
+          <p className="section-label">Como eu penso</p>
+          <h2 className="headline mt-4 text-4xl md:text-6xl">
+            Estratégia antes
+            <br />
+            de <em>execução.</em>
+          </h2>
+        </motion.div>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.12 }}
-        className="grid-divider mt-14 grid grid-cols-1 md:grid-cols-3"
-      >
-        {cards.map((card) => (
-          <motion.article
-            key={card.number}
-            variants={item}
-            className="group relative min-h-[290px] p-8 transition-colors hover:bg-[var(--surface)]"
-          >
-            <span className="pointer-events-none absolute right-6 top-4 select-none text-6xl text-white/5">
-              {card.number}
-            </span>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.12 }}
+          className="grid-divider mt-14 grid grid-cols-1 md:grid-cols-3"
+        >
+          {cards.map((card) => (
+            <motion.article
+              key={card.number}
+              variants={item}
+              whileHover={{ y: -4 }}
+              className="group relative min-h-[300px] p-10 transition-colors hover:bg-[var(--surface)]"
+            >
+              <span className="pointer-events-none absolute right-6 top-4 select-none text-6xl text-white/5">
+                {card.number}
+              </span>
 
-            <div className="mb-6 inline-flex h-11 w-11 items-center justify-center border border-[var(--border)] text-xl">
-              {card.icon}
-            </div>
+              <div className="mb-6 inline-flex h-11 w-11 items-center justify-center border border-[var(--border)] text-xl">
+                {card.icon}
+              </div>
 
-            <h3 className="headline text-[1.4rem]">
-              {card.title}
-              <span style={{ color: "var(--accent)" }}>{card.accent}</span>
-            </h3>
-            <p className="mono-muted mt-5 text-[0.8rem] leading-7">{card.text}</p>
-          </motion.article>
-        ))}
-      </motion.div>
+              <h3 className="headline text-[1.4rem]">
+                {card.title}
+                <span style={{ color: "var(--accent)" }}>{card.accent}</span>
+              </h3>
+              <p className="body-text mt-6">{card.text}</p>
+            </motion.article>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }

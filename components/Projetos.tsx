@@ -72,6 +72,7 @@ export default function Projetos() {
 
   return (
     <section id="projetos" className="section-shell bg-[var(--bg)]">
+      <div className="mx-auto max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -124,9 +125,9 @@ export default function Projetos() {
               <AnimatePresence initial={false}>
                 {isOpen ? (
                   <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: "auto" }}
-                    exit={{ height: 0 }}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.35, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
@@ -163,7 +164,7 @@ export default function Projetos() {
                               ? "-80%"
                               : "✓"}
                         </p>
-                        <p className="mono-muted mt-4 text-sm leading-7">{project.resultado}</p>
+                        <p className="body-text mt-4">{project.resultado}</p>
 
                         <div className="mt-8 flex gap-6 text-sm">
                           {project.projetoUrl ? (
@@ -194,6 +195,7 @@ export default function Projetos() {
           );
         })}
       </div>
+      </div>
     </section>
   );
 }
@@ -209,7 +211,7 @@ function Field({ title, text }: FieldProps) {
       <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-[var(--accent)]">
         {title}
       </p>
-      <p className="mono-muted mt-2 text-sm leading-7">{text}</p>
+      <p className="body-text mt-2">{text}</p>
     </div>
   );
 }

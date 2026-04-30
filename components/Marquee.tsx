@@ -16,7 +16,7 @@ export default function Marquee() {
 
   return (
     <section className="overflow-hidden border-y border-[var(--border)] bg-[var(--surface)] py-6">
-      <div className="whitespace-nowrap" style={{ animation: "marquee 20s linear infinite" }}>
+      <div className="whitespace-nowrap" style={{ animation: "marquee 22s linear infinite" }}>
         {content.map((tech, index) => (
           <span
             key={`${tech}-${index}`}

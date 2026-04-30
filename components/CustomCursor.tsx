@@ -7,6 +7,8 @@ export default function CustomCursor() {
   const ringRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
+
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
@@ -26,8 +28,8 @@ export default function CustomCursor() {
     };
 
     const animate = () => {
-      ringX += (targetX - ringX) * 0.12;
-      ringY += (targetY - ringY) * 0.12;
+      ringX += (targetX - ringX) * 0.1;
+      ringY += (targetY - ringY) * 0.1;
       ring.style.transform = `translate(${ringX}px, ${ringY}px)`;
       raf = requestAnimationFrame(animate);
     };
@@ -58,7 +60,7 @@ export default function CustomCursor() {
         id="cursor-ring"
         className="pointer-events-none fixed left-0 top-0 z-[99] hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border md:block"
         style={{
-          borderColor: "rgba(200, 255, 0, 0.4)",
+          borderColor: "rgba(200, 255, 0, 0.35)",
           opacity: 0,
         }}
       />

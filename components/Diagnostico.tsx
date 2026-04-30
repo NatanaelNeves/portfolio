@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 import { analisarIdeia, type DiagnosticoResultado } from "@/lib/diagnostico";
 
@@ -33,7 +33,7 @@ export default function Diagnostico() {
   };
 
   return (
-    <section id="diagnostico" className="section-shell bg-[var(--surface)]">
+    <section id="diagnostico" className="section-shell bg-[var(--bg)]">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -47,8 +47,8 @@ export default function Diagnostico() {
           <br />
           Eu digo <em>por onde começar.</em>
         </h2>
-        <p className="mono-muted mx-auto mt-6 max-w-[640px] text-sm leading-7">
-          Descreve o que você quer construir - mesmo que ainda esteja bagunçado.
+        <p className="body-text mx-auto mt-6 max-w-[640px] text-center">
+          Descreve o que você quer construir — mesmo que ainda esteja bagunçado.
           Retorno um diagnóstico com o problema real, estrutura sugerida e próximos passos concretos.
         </p>
 
@@ -74,42 +74,59 @@ export default function Diagnostico() {
 
         {erro ? <p className="mt-4 font-mono text-xs text-[var(--accent2)]">{erro}</p> : null}
 
-        {(loading || resultado) && (
-          <div className="mt-8 border border-[var(--border)] p-6 text-left">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--accent)]">
-                Diagnóstico - Natanael Neves
-              </p>
-              <p className="font-mono text-xs text-[var(--muted)]">{hora}</p>
-            </div>
-
-            {loading ? (
-              <div className="mt-8 flex gap-2">
-                {[0, 1, 2].map((dot) => (
-                  <span
-                    key={dot}
-                    className="h-2 w-2 rounded-full"
-                    style={{
-                      background: "var(--accent)",
-                      animation: `pulse 1.2s ease infinite`,
-                      animationDelay: `${dot * 0.2}s`,
-                    }}
-                  />
-                ))}
+        <AnimatePresence>
+          {(loading || resultado) && (
+            <motion.div
+              key="result-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-8 border border-[var(--border)] p-6 text-left"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--accent)]">
+                  Diagnóstico - Natanael Neves
+                </p>
+                <p className="font-mono text-xs text-[var(--muted)]">{hora}</p>
               </div>
-            ) : null}
 
-            {resultado ? (
-              <div className="mt-6 space-y-5">
-                <ResultItem title="Problema identificado" value={resultado.problema} />
-                <ResultItem title="Estrutura sugerida" value={resultado.estrutura} />
-                <ResultItem title="Stack recomendada" value={resultado.stack} />
-                <ResultItem title="Próximos passos" value={resultado.proximos_passos} />
-                <ResultItem title="Ponto de atenção" value={resultado.aviso} danger />
-              </div>
-            ) : null}
-          </div>
-        )}
+              {loading ? (
+                <div className="mt-8 flex gap-2">
+                  {[0, 1, 2].map((dot) => (
+                    <span
+                      key={dot}
+                      className="h-2 w-2 rounded-full"
+                      style={{
+                        background: "var(--accent)",
+                        animation: `pulse 1.2s ease infinite`,
+                        animationDelay: `${dot * 0.2}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : null}
+
+              {resultado ? (
+                <motion.div
+                  className="mt-6 space-y-5"
+                  initial="hidden"
+                  animate="show"
+                  variants={{
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.08 } },
+                  }}
+                >
+                  <ResultItem title="Problema identificado" value={resultado.problema} />
+                  <ResultItem title="Estrutura sugerida" value={resultado.estrutura} />
+                  <ResultItem title="Stack recomendada" value={resultado.stack} />
+                  <ResultItem title="Próximos passos" value={resultado.proximos_passos} />
+                  <ResultItem title="Ponto de atenção" value={resultado.aviso} danger />
+                </motion.div>
+              ) : null}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </section>
   );
@@ -123,7 +140,12 @@ type ResultItemProps = {
 
 function ResultItem({ title, value, danger = false }: ResultItemProps) {
   return (
-    <div>
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 12 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+      }}
+    >
       <p
         className="font-mono text-[0.65rem] uppercase tracking-[0.18em]"
         style={{ color: danger ? "var(--accent2)" : "var(--accent)" }}
@@ -131,6 +153,6 @@ function ResultItem({ title, value, danger = false }: ResultItemProps) {
         {title}
       </p>
       <p className="mono-muted mt-2 text-sm leading-7">{value}</p>
-    </div>
+    </motion.div>
   );
 }

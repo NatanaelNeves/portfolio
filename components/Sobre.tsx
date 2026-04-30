@@ -26,8 +26,8 @@ const skills = [
 
 export default function Sobre() {
   return (
-    <section id="sobre" className="section-shell bg-[var(--bg)]">
-      <div className="grid gap-14 md:grid-cols-[1fr_1.2fr] md:gap-24">
+    <section id="sobre" className="section-shell bg-[var(--surface)]">
+      <div className="mx-auto max-w-7xl grid gap-14 md:grid-cols-[1fr_1.2fr] md:gap-24">
         <motion.aside
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export default function Sobre() {
                     {fact.value}
                   </a>
                 ) : (
-                  <span className="text-sm">{fact.value}</span>
+                  <span className="text-[0.9rem]">{fact.value}</span>
                 )}
               </div>
             ))}
@@ -109,7 +109,7 @@ function Block({ title, text }: BlockProps) {
   return (
     <div>
       <h3 className="headline text-[1.3rem]">{title}</h3>
-      <p className="mono-muted mt-4 text-[0.85rem] leading-8">{text}</p>
+      <p className="body-text mt-4">{text}</p>
     </div>
   );
 }

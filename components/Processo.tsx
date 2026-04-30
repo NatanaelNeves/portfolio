@@ -28,6 +28,7 @@ const steps = [
 export default function Processo() {
   return (
     <section id="processo" className="section-shell bg-[var(--surface)]">
+      <div className="mx-auto max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +51,7 @@ export default function Processo() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.12 }}
-            className="p-7"
+            className="p-8"
           >
             <div className="h-[2px] w-full bg-[var(--border)]">
               <motion.div
@@ -66,9 +67,10 @@ export default function Processo() {
               {step.label}
             </p>
             <h3 className="headline mt-4 text-[1.2rem]">{step.title}</h3>
-            <p className="mono-muted mt-4 text-[0.8rem] leading-7">{step.text}</p>
+            <p className="body-text mt-4 text-[0.9rem]">{step.text}</p>
           </motion.article>
         ))}
+      </div>
       </div>
     </section>
   );
