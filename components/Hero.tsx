@@ -6,27 +6,31 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden border-b border-[var(--border)] bg-[var(--bg)] pb-16 pt-32"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden border-b border-[var(--border)] pb-24 pt-28"
     >
-      <span className="pointer-events-none absolute right-6 top-24 select-none font-sans text-[4rem] text-white/5 md:right-12 md:text-[5rem]">
+      {/* Marca d'água estrutural */}
+      <span
+        className="pointer-events-none absolute right-0 top-12 select-none font-sans text-[clamp(8rem,18vw,20rem)] font-extrabold leading-none text-white/[0.022]"
+        aria-hidden
+      >
         01
       </span>
 
-      <div className="mx-auto w-full max-w-7xl px-6 md:px-12">
+      <div className="container relative z-10">
         <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="font-mono text-[0.75rem] uppercase tracking-[0.15em] text-[var(--accent)]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15, duration: 0.5 }}
+          className="label-accent"
         >
-          Desenvolvedor Full Stack · Fortaleza, CE
+          Full Stack Developer · Fortaleza, CE
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="headline mt-6 max-w-5xl text-[clamp(2.6rem,7vw,7rem)]"
+          transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="display mt-5 max-w-[920px] text-[clamp(2.75rem,6.5vw,6.5rem)]"
         >
           Ideias confusas se tornam
           <br />
@@ -36,49 +40,54 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-          className="body-text mt-8 max-w-[560px]"
+          transition={{ delay: 0.65, duration: 0.7 }}
+          className="body mt-7 max-w-[540px]"
         >
-          Desenvolvo sistemas e sites com foco no problema real — não na tecnologia pela tecnologia.
-          Do diagnóstico ao deploy, com clareza em cada etapa.
+          Desenvolvo sistemas e sites com foco no problema real — não na
+          tecnologia pela tecnologia. Do diagnóstico ao deploy, com clareza em
+          cada etapa.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
-          className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap"
+          transition={{ delay: 0.85, duration: 0.6 }}
+          className="mt-10 flex flex-col gap-3 sm:flex-row"
         >
-          <motion.a
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
-            href="#diagnostico"
-            className="btn-primary rounded-[2px] px-6 py-3"
-          >
-            Diagnosticar ideia
-          </motion.a>
-          <motion.a
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
-            href="#projetos"
-            className="btn-ghost rounded-[2px] px-6 py-3"
-          >
+          <a href="#diagnostico" className="btn-primary">
+            Diagnosticar ideia →
+          </a>
+          <a href="#projetos" className="btn-ghost">
             Ver projetos
-          </motion.a>
+          </a>
+        </motion.div>
+
+        {/* Metadados técnicos — identidade de sistema */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-16 flex flex-wrap items-center gap-x-6 gap-y-2"
+        >
+          {["TypeScript", "React", "Node.js", "Azure", "PostgreSQL"].map(
+            (tag) => (
+              <span key={tag} className="label">
+                {tag}
+              </span>
+            )
+          )}
         </motion.div>
       </div>
 
+      {/* Indicador de scroll */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
-        className="absolute bottom-6 right-6 flex flex-col items-center gap-3 md:right-12"
+        transition={{ delay: 1.5, duration: 0.8 }}
+        className="absolute bottom-8 right-[clamp(1.25rem,4vw,2.5rem)] flex flex-col items-center gap-3"
       >
-        <div className="h-10 w-px bg-[var(--border)]" />
-        <span
-          className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-[var(--muted)]"
-          style={{ writingMode: "vertical-rl" }}
-        >
+        <div className="h-12 w-px bg-[var(--border)]" />
+        <span className="label" style={{ writingMode: "vertical-rl" }}>
           Scroll
         </span>
       </motion.div>

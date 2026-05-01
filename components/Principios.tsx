@@ -27,63 +27,54 @@ const principles = [
 ];
 
 const container: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.14 },
-  },
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  },
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export default function Principios() {
   return (
-    <section className="section-shell bg-[var(--bg)]">
-      <div className="mx-auto max-w-7xl">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.12 }}
-      >
-        <p className="section-label">Princípios</p>
-        <h2 className="headline mt-4 text-4xl md:text-6xl">
-          O que não negocio
-          <br />
-          em nenhum <em>projeto.</em>
-        </h2>
-      </motion.div>
+    <section className="section bg-[var(--bg)]">
+      <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <p className="label-accent">Princípios</p>
+          <h2 className="heading mt-4 text-[clamp(2rem,4vw,3.25rem)]">
+            O que não negocio
+            <br />
+            em nenhum <em>projeto.</em>
+          </h2>
+        </motion.div>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.12 }}
-        className="grid-divider mt-14 grid grid-cols-1 md:grid-cols-2"
-      >
-        {principles.map((principle) => (
-          <motion.article
-            key={principle.id}
-            variants={item}
-            whileHover={{ y: -4 }}
-            className="bg-[var(--surface)] px-10 py-14 md:px-12"
-          >
-            <p className="font-mono text-xs tracking-[0.16em] text-[var(--muted)]">{principle.id}</p>
-            <h3 className="headline mt-5 text-4xl md:text-[2rem]">
-              <em>{principle.title}</em>
-            </h3>
-            <p className="body-text mt-5 max-w-[380px]">{principle.text}</p>
-          </motion.article>
-        ))}
-      </motion.div>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          className="divide-grid-surface divide-grid mt-12 grid grid-cols-1 md:grid-cols-2"
+        >
+          {principles.map((p) => (
+            <motion.article
+              key={p.id}
+              variants={item}
+              className="group flex flex-col bg-[var(--surface)] p-8 transition-colors hover:bg-[var(--surface-2)] md:p-10"
+            >
+              <p className="mono text-[0.6875rem] tracking-[0.16em]">{p.id}</p>
+              <h3 className="heading mt-5 text-[clamp(1.5rem,2.5vw,2rem)]">
+                <em>{p.title}</em>
+              </h3>
+              <p className="body mt-4 max-w-[400px] text-[1rem]">{p.text}</p>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -28,35 +28,33 @@ const cards = [
 ];
 
 const container: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: {},
   show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], staggerChildren: 0.14 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
   },
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 export default function ComoEuPenso() {
   return (
-    <section className="section-shell bg-[var(--surface)]">
-      <div className="mx-auto max-w-7xl">
+    <section className="section bg-[var(--surface)]">
+      <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.12 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.15 }}
         >
-          <p className="section-label">Como eu penso</p>
-          <h2 className="headline mt-4 text-4xl md:text-6xl">
+          <p className="label-accent">Como eu penso</p>
+          <h2 className="heading mt-4 text-[clamp(2rem,4vw,3.25rem)]">
             Estratégia antes
             <br />
             de <em>execução.</em>
@@ -67,29 +65,34 @@ export default function ComoEuPenso() {
           variants={container}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.12 }}
-          className="grid-divider mt-14 grid grid-cols-1 md:grid-cols-3"
+          viewport={{ once: true, amount: 0.1 }}
+          className="divide-grid mt-12 grid grid-cols-1 md:grid-cols-3"
         >
           {cards.map((card) => (
             <motion.article
               key={card.number}
               variants={item}
-              whileHover={{ y: -4 }}
-              className="group relative min-h-[300px] p-10 transition-colors hover:bg-[var(--surface)]"
+              className="group relative min-h-[280px] p-8 transition-colors duration-200 hover:bg-[var(--surface-2)] md:p-10"
             >
-              <span className="pointer-events-none absolute right-6 top-4 select-none text-6xl text-white/5">
+              <span
+                className="pointer-events-none absolute right-5 top-4 select-none font-sans text-[3.5rem] font-extrabold leading-none text-white/[0.04]"
+                aria-hidden
+              >
                 {card.number}
               </span>
 
-              <div className="mb-6 inline-flex h-11 w-11 items-center justify-center border border-[var(--border)] text-xl">
+              <div
+                className="mb-6 inline-flex h-10 w-10 items-center justify-center border border-[var(--border)] text-lg"
+                style={{ color: "var(--accent)" }}
+              >
                 {card.icon}
               </div>
 
-              <h3 className="headline text-[1.4rem]">
+              <h3 className="heading text-[1.125rem]">
                 {card.title}
                 <span style={{ color: "var(--accent)" }}>{card.accent}</span>
               </h3>
-              <p className="body-text mt-6">{card.text}</p>
+              <p className="body mt-4 text-[1rem]">{card.text}</p>
             </motion.article>
           ))}
         </motion.div>

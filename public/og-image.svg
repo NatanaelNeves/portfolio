@@ -1,7 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <rect width="1200" height="630" fill="#0a0a0a"/>
-  <rect x="48" y="48" width="1104" height="534" stroke="#222222"/>
-  <text x="90" y="240" fill="#f0ede8" font-family="Arial, sans-serif" font-size="96" font-weight="700">Natanael Neves</text>
-  <text x="90" y="320" fill="#c8ff00" font-family="Arial, sans-serif" font-size="56" font-style="italic">Ideias confusas se tornam produtos claros.</text>
-  <text x="90" y="410" fill="#888888" font-family="Courier New, monospace" font-size="28" letter-spacing="4">DESENVOLVEDOR FULL STACK · FORTALEZA, CE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0c0c0c"/>
+
+  <!-- N mark watermark -->
+  <g transform="translate(900, 100)" opacity="0.05">
+    <rect x="0" y="0" width="38" height="190" fill="#c8ff00"/>
+    <rect x="148" y="0" width="38" height="190" fill="#c8ff00"/>
+    <polygon points="38,0 86,0 186,190 138,190" fill="#c8ff00"/>
+  </g>
+
+  <!-- Top border accent -->
+  <rect x="0" y="0" width="1200" height="3" fill="#c8ff00" opacity="0.4"/>
+
+  <!-- Label -->
+  <text x="80" y="200" font-family="ui-monospace,Courier New,monospace" font-size="13"
+        letter-spacing="4" fill="#c8ff00">FULL STACK DEVELOPER · FORTALEZA, CE</text>
+
+  <!-- Name -->
+  <text x="80" y="305" font-family="system-ui,Arial,sans-serif" font-weight="800"
+        font-size="80" letter-spacing="-3" fill="#f2efe9">Natanael</text>
+  <text x="80" y="400" font-family="system-ui,Arial,sans-serif" font-weight="800"
+        font-size="80" letter-spacing="-3" fill="#f2efe9">Neves</text>
+
+  <!-- Tagline -->
+  <text x="80" y="458" font-family="system-ui,Arial,sans-serif" font-size="22"
+        fill="#f2efe9" opacity="0.5">Penso como arquiteto, executo como dev.</text>
+
+  <!-- Bottom rule + URL -->
+  <rect x="80" y="526" width="56" height="3" fill="#c8ff00"/>
+  <text x="80" y="562" font-family="ui-monospace,Courier New,monospace" font-size="14"
+        letter-spacing="2" fill="#565656">natanaelneves.vercel.app</text>
 </svg>

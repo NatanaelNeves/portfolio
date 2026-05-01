@@ -19,9 +19,9 @@ export default function CustomCursor() {
     let ringY = targetY;
     let raf = 0;
 
-    const onMove = (event: MouseEvent) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
+    const onMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
       dot.style.transform = `translate(${targetX}px, ${targetY}px)`;
       dot.style.opacity = "1";
       ring.style.opacity = "1";
@@ -47,22 +47,13 @@ export default function CustomCursor() {
     <>
       <div
         ref={dotRef}
-        id="cursor"
-        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full md:block"
-        style={{
-          background: "var(--accent)",
-          mixBlendMode: "difference",
-          opacity: 0,
-        }}
+        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full md:block"
+        style={{ background: "var(--accent)", mixBlendMode: "difference", opacity: 0 }}
       />
       <div
         ref={ringRef}
-        id="cursor-ring"
         className="pointer-events-none fixed left-0 top-0 z-[99] hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border md:block"
-        style={{
-          borderColor: "rgba(200, 255, 0, 0.35)",
-          opacity: 0,
-        }}
+        style={{ borderColor: "rgba(200, 255, 0, 0.3)", opacity: 0 }}
       />
     </>
   );
