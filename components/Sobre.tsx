@@ -2,127 +2,345 @@
 
 import { motion } from "framer-motion";
 
-const facts = [
-  { label: "Base", value: "Fortaleza, CE — Brasil" },
-  { label: "Atual", value: "Analista de TI — O Pequeno Nazareno" },
-  { label: "Anterior", value: "Dev — Cotabox" },
-  { label: "Formação", value: "ADS + MBA Full Stack & DevOps" },
+/* ─── Career Timeline ────────────────────────────────────────────── */
+
+type TimelineEntry = {
+  period: string;
+  role: string;
+  org: string;
+  highlights: string[];
+  stack?: string[];
+  current?: boolean;
+};
+
+const career: TimelineEntry[] = [
   {
-    label: "GitHub",
-    value: "github.com/natanaelneves",
-    link: "https://github.com/natanaelneves",
+    period: "Jan 2026 — presente",
+    role: "Analista de TI Pleno",
+    org: "Pequeno Nazareno",
+    current: true,
+    highlights: [
+      "Infraestrutura, suporte e continuidade dos serviços de TI de toda a organização",
+      "Administração do Microsoft 365 (Exchange, Teams, SharePoint) e Azure AD",
+      "Desenvolveu do zero plataforma de chamados usada diariamente por 3+ setores e dezenas de colaboradores",
+      "Gestão de fornecedores, backups periódicos e segurança da informação",
+    ],
+    stack: ["React", "Node.js", "TypeScript", "PostgreSQL", "Azure", "Microsoft 365"],
+  },
+  {
+    period: "Ago 2025 — Jan 2026",
+    role: "Estagiário de Desenvolvimento",
+    org: "Cotabox",
+    highlights: [
+      "Suporte técnico a sistemas web corporativos B2B de gestão de compras",
+      "Diagnóstico e correção de falhas em aplicações e integrações entre serviços",
+      "Consulta e validação de dados em bancos relacionais e não relacionais",
+    ],
+    stack: ["React", "TypeScript"],
+  },
+  {
+    period: "Mai 2025 — Jul 2025",
+    role: "Estagiário de Suporte de TI",
+    org: "TRT 7ª Região",
+    highlights: [
+      "Atendimento e resolução de chamados presenciais e remotos em ambiente institucional",
+      "Criou sistema de pontuação para acompanhamento de produtividade, substituindo controle manual",
+    ],
+  },
+  {
+    period: "Jan 2023 — Mai 2024",
+    role: "Suporte Técnico de Internet",
+    org: "Smart Soluções",
+    highlights: [
+      "Diagnóstico de falhas de rede, configuração de equipamentos e atendimento técnico a clientes",
+      "Reduziu 30% o tempo médio de atendimento criando guia interno adotado por toda a equipe",
+    ],
   },
 ];
 
-const skills = [
-  "TypeScript",
-  "React",
-  "Node.js",
-  "Azure",
-  "Tailwind CSS",
-  "SQL",
-  "REST API",
-  "Git",
-  "DevOps",
-  "UX/UI",
-  "Microsoft 365",
+const education = [
+  {
+    period: "Dez 2025 — Em andamento",
+    degree: "MBA em Fullstack e DevOps",
+    school: "Unifametro · Fortaleza, CE",
+    current: true,
+  },
+  {
+    period: "Ago 2022 — Dez 2025",
+    degree: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+    school: "Unifametro · Fortaleza, CE",
+  },
+  {
+    period: "Mai 2024 — Ago 2024",
+    degree: "Curso Fullstack",
+    school: "Digital College · 200h",
+  },
+];
+
+const certifications = [
+  { name: "Desenvolvimento Fullstack", issuer: "Digital College · 2024 · 200h" },
+  { name: "JavaScript e React", issuer: "Udemy · 2023 · 40h" },
+  { name: "Banco de Dados SQL", issuer: "Coursera · 2023 · 30h" },
+];
+
+/* ─── Philosophy Blocks ──────────────────────────────────────────── */
+
+const blocks = [
+  {
+    title: "Infra que eu mantenho. Sistemas que eu construo.",
+    text: "Sou o Analista de TI responsável pela infraestrutura, suporte e continuidade dos serviços de tecnologia de uma organização inteira. Mas meu diferencial é que também coloco em produção sistemas internos que automatizam o que antes era feito manualmente.",
+  },
+  {
+    title: "Penso como arquiteto, executo como dev.",
+    text: "Antes de abrir o editor, entendo o problema. Em todos os sistemas que entreguei, a primeira pergunta foi: qual é o problema de verdade? A resposta muda tudo que vem depois.",
+  },
+  {
+    title: "Clareza como padrão, não exceção.",
+    text: "Cada etapa tem critério de aceite. Cada decisão tem razão documentada. Você não vai receber um produto pronto sem entender o que está recebendo.",
+  },
+];
+
+const facts = [
+  { label: "Base", value: "Fortaleza, CE — Brasil" },
+  { label: "Atual", value: "Analista de TI Pleno · Pequeno Nazareno" },
+  { label: "Inglês", value: "Intermediário — leitura técnica fluente" },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/in/natanaelnevesalves",
+    href: "https://linkedin.com/in/natanaelnevesalves",
+  },
+  {
+    label: "GitHub",
+    value: "github.com/natanaelneves",
+    href: "https://github.com/natanaelneves",
+  },
 ];
 
 export default function Sobre() {
   return (
     <section id="sobre" className="section bg-[var(--surface)]">
       <div className="container">
-        <div className="grid gap-12 md:grid-cols-[1fr_1.3fr] md:gap-20">
-          {/* Sidebar */}
-          <motion.aside
-            initial={{ opacity: 0, y: 28 }}
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <p className="label-accent">Sobre</p>
+          <h2 className="heading mt-4" style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}>
+            Natanael Neves.
+          </h2>
+          <p className="label mt-3">Analista de TI Pleno · Frontend Developer · Fortaleza, CE</p>
+        </motion.div>
+
+        <div className="mt-14 grid gap-14 md:grid-cols-[1fr_1.15fr] md:gap-20">
+          {/* Left — Philosophy + Facts */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true, amount: 0.1 }}
-            className="md:sticky md:top-28 md:self-start"
+            className="space-y-8"
           >
-            <p className="label-accent">Analista · Dev · Arquiteto</p>
-            <h2 className="heading mt-4 text-[clamp(1.75rem,3.5vw,2.75rem)]">
-              Natanael Neves
-            </h2>
-            <p className="mt-1.5 text-[1.0625rem]" style={{ color: "var(--muted)" }}>
-              <em>Digital product builder</em>
-            </p>
+            {blocks.map((block) => (
+              <div key={block.title} className="border-l-2 border-[var(--border)] pl-5">
+                <h3 className="heading text-[1.0625rem]">{block.title}</h3>
+                <p className="body mt-3 text-[0.9375rem] leading-[1.75]">{block.text}</p>
+              </div>
+            ))}
 
-            <div className="mt-8 border-t border-[var(--border)]">
+            {/* Quick facts */}
+            <div className="border-t border-[var(--border)] pt-6">
               {facts.map((fact) => (
                 <div
                   key={fact.label}
-                  className="flex items-start gap-4 border-b border-[var(--border)] py-3.5"
+                  className="flex items-start gap-4 border-b border-[var(--border)] py-3"
                 >
-                  <span className="label min-w-[5rem] shrink-0 pt-[1px]">
-                    {fact.label}
-                  </span>
-                  {fact.link ? (
+                  <span className="label min-w-[5rem] shrink-0 pt-px">{fact.label}</span>
+                  {fact.href ? (
                     <a
-                      href={fact.link}
-                      className="text-[0.875rem] transition-colors hover:text-[var(--accent)]"
-                      style={{ color: "var(--accent)" }}
+                      href={fact.href}
                       target="_blank"
                       rel="noreferrer"
+                      className="text-[0.875rem] transition-colors hover:text-[var(--accent)]"
+                      style={{ color: "var(--accent)" }}
                     >
                       {fact.value}
                     </a>
                   ) : (
-                    <span className="text-[0.875rem] leading-snug text-[var(--text-2)]">
+                    <span
+                      className="text-[0.875rem] leading-snug"
+                      style={{ color: "var(--text-2)" }}
+                    >
                       {fact.value}
                     </span>
                   )}
                 </div>
               ))}
             </div>
-          </motion.aside>
 
-          {/* Conteúdo */}
+            {/* Certifications */}
+            <div>
+              <p className="label mb-4">Certificados</p>
+              <div className="space-y-3">
+                {certifications.map((cert) => (
+                  <div key={cert.name} className="flex items-start gap-3">
+                    <span
+                      className="mt-[2px] font-mono text-[0.65rem]"
+                      style={{ color: "var(--accent)" }}
+                    >
+                      ◆
+                    </span>
+                    <div>
+                      <p className="font-sans text-[0.875rem]" style={{ color: "var(--text)" }}>
+                        {cert.name}
+                      </p>
+                      <p className="mono text-[0.7rem]">{cert.issuer}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right — Career + Education timeline */}
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            className="space-y-8"
+            viewport={{ once: true, amount: 0.05 }}
           >
-            <Block
-              title="Penso como arquiteto, executo como dev."
-              text="Já entreguei sistemas pra ONG com dezenas de usuários, site com CMS pra cliente não-técnica gerenciar sozinha e app de treino com feedback em tempo real. Em todos, a primeira pergunta foi a mesma: qual é o problema de verdade?"
-            />
-            <Block
-              title="Stack muda. Raciocínio, não."
-              text="Trabalho com TypeScript, React, Node.js e Azure no dia a dia. Mas já escolhi Firebase quando fazia mais sentido, Sanity quando o cliente precisava de autonomia e SQL quando consistência era inegociável. Contexto define ferramenta."
-            />
-            <Block
-              title="Clareza como padrão, não exceção."
-              text="Cada etapa tem critério de aceite. Cada decisão tem razão documentada. Você não vai receber um produto pronto sem entender o que está recebendo."
-            />
+            {/* Career */}
+            <p className="label mb-6">Experiência</p>
+            <div className="relative mb-12 space-y-0">
+              <div
+                className="absolute left-[5px] top-2 h-full w-px"
+                style={{ background: "var(--border)" }}
+              />
 
-            <div className="flex flex-wrap gap-2 pt-2">
-              {skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="border border-[var(--border)] px-3 py-[0.35rem] font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--muted)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              {career.map((entry, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.55,
+                    delay: i * 0.07,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="relative pb-12 pl-8"
                 >
-                  {skill}
-                </span>
+                  <span
+                    className="absolute left-0 top-[5px] h-[11px] w-[11px] rounded-full border-2"
+                    style={{
+                      background: entry.current ? "var(--accent)" : "var(--surface)",
+                      borderColor: entry.current ? "var(--accent)" : "var(--border-strong)",
+                      boxShadow: entry.current ? "0 0 8px var(--accent)" : "none",
+                    }}
+                  />
+
+                  <p
+                    className="label mb-1.5"
+                    style={{ color: entry.current ? "var(--accent)" : undefined }}
+                  >
+                    {entry.period}
+                    {entry.current && (
+                      <span
+                        className="ml-2 inline-block h-[5px] w-[5px] rounded-full align-middle"
+                        style={{
+                          background: "var(--status)",
+                          animation: "pulse-status 2.5s ease-in-out infinite",
+                        }}
+                      />
+                    )}
+                  </p>
+
+                  <p className="heading text-[0.9375rem]">{entry.role}</p>
+                  <p className="mono text-[0.75rem]" style={{ color: "var(--muted)" }}>
+                    {entry.org}
+                  </p>
+
+                  <ul className="mt-3 space-y-1.5">
+                    {entry.highlights.map((h) => (
+                      <li
+                        key={h}
+                        className="flex items-start gap-2 text-[0.8125rem] leading-[1.6]"
+                        style={{ color: "var(--text-2)", fontFamily: "var(--font-syne)" }}
+                      >
+                        <span
+                          style={{ color: "var(--border-strong)", marginTop: "3px", flexShrink: 0 }}
+                        >
+                          +
+                        </span>
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {entry.stack && (
+                    <div className="mt-3 flex flex-wrap gap-1">
+                      {entry.stack.map((tag) => (
+                        <span
+                          key={tag}
+                          className="stack-tag"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Education */}
+            <p className="label mb-6">Educação</p>
+            <div className="relative space-y-0">
+              <div
+                className="absolute left-[5px] top-2 h-full w-px"
+                style={{ background: "var(--border)" }}
+              />
+
+              {education.map((entry, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.06,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="relative pb-7 pl-8"
+                >
+                  <span
+                    className="absolute left-0 top-[5px] h-[11px] w-[11px] rounded-full border-2"
+                    style={{
+                      background: entry.current ? "var(--accent)" : "var(--surface)",
+                      borderColor: entry.current ? "var(--accent)" : "var(--border-strong)",
+                      boxShadow: entry.current ? "0 0 8px var(--accent)" : "none",
+                    }}
+                  />
+
+                  <p
+                    className="label mb-1.5"
+                    style={{ color: entry.current ? "var(--accent)" : undefined }}
+                  >
+                    {entry.period}
+                  </p>
+                  <p className="heading text-[0.9375rem]">{entry.degree}</p>
+                  <p className="mono text-[0.75rem]" style={{ color: "var(--muted)" }}>
+                    {entry.school}
+                  </p>
+                </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
       </div>
     </section>
-  );
-}
-
-type BlockProps = { title: string; text: string };
-
-function Block({ title, text }: BlockProps) {
-  return (
-    <div className="border-l-2 border-[var(--border)] pl-5">
-      <h3 className="heading text-[1.125rem]">{title}</h3>
-      <p className="body mt-3 text-[1rem]">{text}</p>
-    </div>
   );
 }

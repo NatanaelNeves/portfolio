@@ -1,40 +1,32 @@
-const technologies = [
-  "TypeScript",
+const primaryStack = [
   "React",
+  "TypeScript",
+  "Firebase",
+  "Next.js",
   "Node.js",
+  "PostgreSQL",
   "Azure",
   "Tailwind CSS",
-  "DevOps",
-  "SQL",
-  "REST API",
-  "UX/UI",
-  "GitHub",
+  "Framer Motion",
+  "Sanity.io",
 ];
 
-export default function Marquee() {
-  const content = [...technologies, ...technologies];
-
+export default function Stack() {
   return (
-    <section className="overflow-hidden border-b border-[var(--border)] bg-[var(--surface)] py-[1.125rem]">
-      <div
-        className="whitespace-nowrap"
-        style={{ animation: "marquee 26s linear infinite" }}
-      >
-        {content.map((tech, index) => (
+    <div className="border-y border-[var(--border)] bg-[var(--surface)]">
+      <div className="container flex flex-wrap items-center gap-x-5 gap-y-2 py-5">
+        <span className="label mr-3" style={{ color: "var(--accent)" }}>
+          Stack
+        </span>
+        {primaryStack.map((tech) => (
           <span
-            key={`${tech}-${index}`}
-            className="mr-8 inline-flex items-center gap-6 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-[var(--muted)]"
+            key={tech}
+            className="stack-tag"
           >
             {tech}
-            <span
-              aria-hidden
-              style={{ color: "var(--border-strong)", fontSize: "0.5rem" }}
-            >
-              ◆
-            </span>
           </span>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

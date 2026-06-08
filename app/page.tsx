@@ -1,14 +1,13 @@
 import CTAFinal from "@/components/CTAFinal";
-import ComoEuPenso from "@/components/ComoEuPenso";
-import Diagnostico from "@/components/Diagnostico";
+import ClientStrip from "@/components/ClientStrip";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
+import Stack from "@/components/Marquee";
 import Navbar from "@/components/Navbar";
-import Principios from "@/components/Principios";
 import Processo from "@/components/Processo";
 import Projetos from "@/components/Projetos";
 import Sobre from "@/components/Sobre";
+// import Testimonials from "@/components/Testimonials"; // Descomente quando tiver depoimentos reais
 
 export default function Home() {
   return (
@@ -16,13 +15,12 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
-        <ComoEuPenso />
         <Projetos />
+        <ClientStrip />
+        {/* <Testimonials /> */}
         <Processo />
-        <Diagnostico />
+        <Stack />
         <Sobre />
-        <Principios />
         <CTAFinal />
       </main>
       <Footer />

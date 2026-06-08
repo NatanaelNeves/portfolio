@@ -15,6 +15,10 @@
   --accent: #c8ff00;
   --accent-bg: rgba(200, 255, 0, 0.07);
   --error: #ff4444;
+  --status: #22c55e;
+
+  /* Body font — Inter para texto longo, Syne só para headings */
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
 @theme inline {
@@ -116,10 +120,10 @@ em {
   color: var(--text);
 }
 
-/* Body — parágrafos de conteúdo */
+/* Body — parágrafos de conteúdo (Inter, não Syne — Syne é display) */
 .body {
-  font-family: var(--font-syne), sans-serif;
-  font-size: 1.0625rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
   line-height: 1.75;
   color: var(--text-2);
 }
@@ -212,10 +216,61 @@ em {
   }
 }
 
+@keyframes pulse-status {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* ─── Touch ──────────────────────────────────────────────────────── */
 
 @media (pointer: coarse) {
   body {
     cursor: auto;
   }
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Stack tags ─────────────────────────────────────────────────── */
+
+/* Garante contraste WCAG AA nas tags de stack */
+.stack-tag {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  border: 1px solid var(--border-strong);
+  padding: 0.3rem 0.65rem;
+  line-height: 1;
+  display: inline-block;
 }
