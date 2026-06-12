@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m, useScroll, useSpring } from "framer-motion";
+import { useRef } from "react";
+import { EASE, Reveal, SectionHeader } from "@/components/motion";
 
 /* ─── Career Timeline ────────────────────────────────────────────── */
 
@@ -116,37 +118,71 @@ const facts = [
   },
 ];
 
+/* Linha da timeline que desenha conforme o scroll percorre a coluna */
+function TimelineSpine({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.85", "end 0.55"],
+  });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 90, damping: 25 });
+
+  return (
+    <>
+      <div
+        className="absolute left-[5px] top-2 h-full w-px"
+        style={{ background: "var(--border)" }}
+        aria-hidden
+      />
+      <m.div
+        className="absolute left-[5px] top-2 h-full w-px origin-top"
+        style={{ scaleY, background: "var(--accent)", opacity: 0.6 }}
+        aria-hidden
+      />
+    </>
+  );
+}
+
+function TimelineDot({ current }: { current?: boolean }) {
+  return (
+    <span
+      className="absolute left-0 top-[5px] h-[11px] w-[11px] rounded-full border-2"
+      style={{
+        background: current ? "var(--accent)" : "var(--surface)",
+        borderColor: current ? "var(--accent)" : "var(--border-strong)",
+        boxShadow: current ? "0 0 8px var(--accent)" : "none",
+      }}
+      aria-hidden
+    />
+  );
+}
+
 export default function Sobre() {
+  const careerRef = useRef<HTMLDivElement | null>(null);
+  const eduRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <section id="sobre" className="section bg-[var(--surface)]">
       <div className="container">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          <p className="label-accent">Sobre</p>
-          <h2 className="heading mt-4" style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}>
-            Natanael Neves.
-          </h2>
-          <p className="label mt-3">Analista de TI Pleno · Frontend Developer · Fortaleza, CE</p>
-        </motion.div>
+        <SectionHeader index="04 / 05" label="Sobre" title="Natanael Neves." />
+        <Reveal delay={0.2} y={8}>
+          <p className="label mt-3">
+            Analista de TI Pleno · Frontend Developer · Fortaleza, CE
+          </p>
+        </Reveal>
 
         <div className="mt-14 grid gap-14 md:grid-cols-[1fr_1.15fr] md:gap-20">
           {/* Left — Philosophy + Facts */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: EASE }}
             viewport={{ once: true, amount: 0.1 }}
             className="space-y-8"
           >
             {blocks.map((block) => (
               <div key={block.title} className="border-l-2 border-[var(--border)] pl-5">
                 <h3 className="heading text-[1.0625rem]">{block.title}</h3>
-                <p className="body mt-3 text-[0.9375rem] leading-[1.75]">{block.text}</p>
+                <p className="body mt-3 text-[0.9375rem]">{block.text}</p>
               </div>
             ))}
 
@@ -163,15 +199,15 @@ export default function Sobre() {
                       href={fact.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[0.875rem] transition-colors hover:text-[var(--accent)]"
-                      style={{ color: "var(--accent)" }}
+                      className="text-[0.875rem] underline-offset-4 transition-all hover:underline"
+                      style={{ color: "var(--accent)", fontFamily: "var(--font-body)" }}
                     >
                       {fact.value}
                     </a>
                   ) : (
                     <span
                       className="text-[0.875rem] leading-snug"
-                      style={{ color: "var(--text-2)" }}
+                      style={{ color: "var(--text-2)", fontFamily: "var(--font-body)" }}
                     >
                       {fact.value}
                     </span>
@@ -202,44 +238,24 @@ export default function Sobre() {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Right — Career + Education timeline */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            viewport={{ once: true, amount: 0.05 }}
-          >
-            {/* Career */}
+          <div>
             <p className="label mb-6">Experiência</p>
-            <div className="relative mb-12 space-y-0">
-              <div
-                className="absolute left-[5px] top-2 h-full w-px"
-                style={{ background: "var(--border)" }}
-              />
+            <div ref={careerRef} className="relative mb-12 space-y-0">
+              <TimelineSpine containerRef={careerRef} />
 
               {career.map((entry, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, x: 12 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.55,
-                    delay: i * 0.07,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+                  transition={{ duration: 0.55, delay: i * 0.07, ease: EASE }}
                   viewport={{ once: true, amount: 0.2 }}
                   className="relative pb-12 pl-8"
                 >
-                  <span
-                    className="absolute left-0 top-[5px] h-[11px] w-[11px] rounded-full border-2"
-                    style={{
-                      background: entry.current ? "var(--accent)" : "var(--surface)",
-                      borderColor: entry.current ? "var(--accent)" : "var(--border-strong)",
-                      boxShadow: entry.current ? "0 0 8px var(--accent)" : "none",
-                    }}
-                  />
+                  <TimelineDot current={entry.current} />
 
                   <p
                     className="label mb-1.5"
@@ -266,8 +282,7 @@ export default function Sobre() {
                     {entry.highlights.map((h) => (
                       <li
                         key={h}
-                        className="flex items-start gap-2 text-[0.8125rem] leading-[1.6]"
-                        style={{ color: "var(--text-2)", fontFamily: "var(--font-syne)" }}
+                        className="body flex items-start gap-2 text-[0.8125rem] leading-[1.6]"
                       >
                         <span
                           style={{ color: "var(--border-strong)", marginTop: "3px", flexShrink: 0 }}
@@ -282,48 +297,31 @@ export default function Sobre() {
                   {entry.stack && (
                     <div className="mt-3 flex flex-wrap gap-1">
                       {entry.stack.map((tag) => (
-                        <span
-                          key={tag}
-                          className="stack-tag"
-                        >
+                        <span key={tag} className="stack-tag">
                           {tag}
                         </span>
                       ))}
                     </div>
                   )}
-                </motion.div>
+                </m.div>
               ))}
             </div>
 
             {/* Education */}
             <p className="label mb-6">Educação</p>
-            <div className="relative space-y-0">
-              <div
-                className="absolute left-[5px] top-2 h-full w-px"
-                style={{ background: "var(--border)" }}
-              />
+            <div ref={eduRef} className="relative space-y-0">
+              <TimelineSpine containerRef={eduRef} />
 
               {education.map((entry, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, x: 12 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.06,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
                   viewport={{ once: true, amount: 0.3 }}
                   className="relative pb-7 pl-8"
                 >
-                  <span
-                    className="absolute left-0 top-[5px] h-[11px] w-[11px] rounded-full border-2"
-                    style={{
-                      background: entry.current ? "var(--accent)" : "var(--surface)",
-                      borderColor: entry.current ? "var(--accent)" : "var(--border-strong)",
-                      boxShadow: entry.current ? "0 0 8px var(--accent)" : "none",
-                    }}
-                  />
+                  <TimelineDot current={entry.current} />
 
                   <p
                     className="label mb-1.5"
@@ -335,10 +333,10 @@ export default function Sobre() {
                   <p className="mono text-[0.75rem]" style={{ color: "var(--muted)" }}>
                     {entry.school}
                   </p>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@ import { DM_Mono, Instrument_Serif, Inter, Syne } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import MotionProvider from "@/components/MotionProvider";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -122,8 +123,12 @@ export default function RootLayout({
       className={`${syne.variable} ${inter.variable} ${dmMono.variable} ${instrumentSerif.variable} antialiased`}
     >
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <ScrollProgress />
+          {children}
+        </MotionProvider>
         <CustomCursor />
+        <div className="grain-overlay" aria-hidden />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

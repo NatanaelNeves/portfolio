@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m, useScroll, useSpring } from "framer-motion";
+import { useRef, useState } from "react";
+import { EASE, SectionHeader } from "@/components/motion";
 
 const steps = [
   {
@@ -35,80 +37,80 @@ const steps = [
   },
 ];
 
+/* Cada etapa acende quando o scroll passa por ela */
+function Step({ step }: { step: (typeof steps)[number] }) {
+  const [seen, setSeen] = useState(false);
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      onViewportEnter={() => setSeen(true)}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.65, ease: EASE }}
+      className="relative pb-14 pl-10 last:pb-0 md:pl-14"
+    >
+      {/* Node diamante na espinha */}
+      <span className="step-node" data-active={seen} aria-hidden />
+
+      <div className="flex items-baseline gap-4">
+        <span
+          className="mono text-xs tracking-[0.15em]"
+          style={{ color: seen ? "var(--accent)" : "var(--muted)", transition: "color 0.4s ease" }}
+        >
+          {step.num}
+        </span>
+        <h3 className="heading text-[1.25rem]">{step.label}</h3>
+      </div>
+
+      <div className="mt-3 gap-10 md:grid md:grid-cols-[1fr_220px]">
+        <p className="body max-w-[480px] text-[0.9375rem] leading-[1.7]">{step.text}</p>
+        <p
+          className="mt-3 font-mono text-[0.75rem] leading-[1.5] md:mt-1 md:text-right"
+          style={{ color: "var(--accent)", opacity: 0.7 }}
+        >
+          {step.detail}
+        </p>
+      </div>
+    </m.div>
+  );
+}
+
 export default function Processo() {
+  const listRef = useRef<HTMLDivElement | null>(null);
+
+  /* A espinha desenha conforme o scroll percorre a pipeline */
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 0.75", "end 0.45"],
+  });
+  const spine = useSpring(scrollYProgress, { stiffness: 90, damping: 24 });
+
   return (
     <section id="processo" className="section bg-[var(--bg)]">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          <p className="label-accent">Processo</p>
-          <h2 className="heading mt-4" style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}>
-            Sem surpresas, sem achismos.
-          </h2>
-          <p className="body mt-4 max-w-[480px]">
-            Cada etapa tem critério de aceite. Cada decisão tem razão documentada.
-            Você não recebe um produto pronto sem entender o que está recebendo.
-          </p>
-        </motion.div>
+        <SectionHeader
+          index="03 / 05"
+          label="Processo"
+          title="Sem surpresas, sem achismos."
+          lead="Cada etapa tem critério de aceite. Cada decisão tem razão documentada. Você não recebe um produto pronto sem entender o que está recebendo."
+        />
 
-        {/* Pipeline */}
-        <div className="mt-14">
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.num}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.6,
-                ease: [0.22, 1, 0.36, 1],
-                delay: i * 0.07,
-              }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="group relative flex gap-6 border-b border-[var(--border)] py-7 md:gap-10"
-            >
-              {/* Accent bar on hover */}
-              <div
-                className="pointer-events-none absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 transition-transform duration-300 group-hover:scale-y-100"
-                style={{ background: "var(--accent)" }}
-              />
+        {/* Pipeline com espinha scroll-linked */}
+        <div ref={listRef} className="relative mt-16">
+          <div
+            className="absolute left-[5px] top-1 h-[calc(100%-8px)] w-px"
+            style={{ background: "var(--border)" }}
+            aria-hidden
+          />
+          <m.div
+            className="absolute left-[5px] top-1 h-[calc(100%-8px)] w-px origin-top"
+            style={{ scaleY: spine, background: "var(--accent)" }}
+            aria-hidden
+          />
 
-              {/* Number */}
-              <div className="flex w-10 shrink-0 flex-col items-end pt-0.5">
-                <span className="mono text-xs tracking-[0.15em]">{step.num}</span>
-              </div>
-
-              {/* Content */}
-              <div className="grid flex-1 gap-2 md:grid-cols-[1fr_auto] md:items-start md:gap-10">
-                <div>
-                  <h3 className="heading text-[1.125rem]">{step.label}</h3>
-                  <p className="body mt-2.5 max-w-[480px] text-[0.9375rem] leading-[1.7]">
-                    {step.text}
-                  </p>
-                </div>
-                <p
-                  className="font-mono text-[0.75rem] leading-[1.5] md:mt-0.5 md:max-w-[200px] md:text-right"
-                  style={{ color: "var(--accent)", opacity: 0.7 }}
-                >
-                  {step.detail}
-                </p>
-              </div>
-
-              {/* Progress bar */}
-              <div className="absolute bottom-0 left-0 h-[1px] w-full bg-[var(--border)]">
-                <motion.div
-                  className="h-full"
-                  style={{ background: "var(--accent)", opacity: 0.4 }}
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  transition={{ duration: 1.1, ease: "easeOut", delay: i * 0.1 + 0.3 }}
-                  viewport={{ once: true, amount: 0.8 }}
-                />
-              </div>
-            </motion.div>
+          {steps.map((step) => (
+            <Step key={step.num} step={step} />
           ))}
         </div>
       </div>

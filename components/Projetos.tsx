@@ -1,8 +1,54 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m, useMotionValue, useSpring } from "framer-motion";
+import type { Variants } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { CountUp, EASE, SectionHeader } from "@/components/motion";
+
+/* ─── Variants compartilhados dos cards ─────────────────────────── */
+
+const colVariants: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/* ─── Tilt 3D ───────────────────────────────────────────────────────
+   O mockup inclina sutilmente seguindo o mouse — sensação de objeto
+   físico. Inerte no touch (mousemove não dispara). */
+function TiltPreview({ children }: { children: React.ReactNode }) {
+  const mvX = useMotionValue(0);
+  const mvY = useMotionValue(0);
+  const rotateX = useSpring(mvX, { stiffness: 180, damping: 22, mass: 0.6 });
+  const rotateY = useSpring(mvY, { stiffness: 180, damping: 22, mass: 0.6 });
+
+  return (
+    <m.div
+      style={{ rotateX, rotateY, transformPerspective: 900 }}
+      whileHover={{ scale: 1.015 }}
+      transition={{ duration: 0.3, ease: EASE }}
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        mvX.set(py * -7);
+        mvY.set(px * 9);
+      }}
+      onMouseLeave={() => {
+        mvX.set(0);
+        mvY.set(0);
+      }}
+      className="will-change-transform"
+    >
+      {children}
+    </m.div>
+  );
+}
 
 /* ─── Browser Mockup ────────────────────────────────────────────── */
 
@@ -36,12 +82,21 @@ function MinhasContasPreview() {
               Saldo total
             </p>
             <p className="font-sans text-2xl font-extrabold leading-tight" style={{ color: "var(--text)" }}>
-              R$ 12.847
+              R${" "}
+              <CountUp
+                value={12847}
+                duration={1.8}
+                formatter={(n) => n.toLocaleString("pt-BR")}
+                className="tabular-nums"
+              />
               <span className="text-base font-normal" style={{ color: "var(--text-2)" }}>,00</span>
             </p>
           </div>
           <span className="flex items-center gap-1.5 font-mono text-[0.5rem]" style={{ color: "var(--status)" }}>
-            <span className="inline-block h-[4px] w-[4px] rounded-full" style={{ background: "var(--status)" }} />
+            <span
+              className="inline-block h-[4px] w-[4px] rounded-full"
+              style={{ background: "var(--status)", animation: "pulse-status 2.5s ease-in-out infinite" }}
+            />
             Em dia
           </span>
         </div>
@@ -51,14 +106,21 @@ function MinhasContasPreview() {
             { label: "Nubank", pct: 62, value: "R$ 7.960" },
             { label: "C6 Bank", pct: 35, value: "R$ 4.497" },
             { label: "Caixa", pct: 3, value: "R$ 390" },
-          ].map((bank) => (
+          ].map((bank, i) => (
             <div key={bank.label}>
               <div className="mb-1 flex justify-between">
                 <span className="font-mono text-[0.5rem]" style={{ color: "var(--muted)" }}>{bank.label}</span>
                 <span className="font-mono text-[0.5rem]" style={{ color: "var(--text-2)" }}>{bank.value}</span>
               </div>
               <div className="h-[2px] w-full" style={{ background: "var(--border)" }}>
-                <div className="h-full" style={{ width: `${bank.pct}%`, background: "var(--accent)", opacity: 0.55 }} />
+                <m.div
+                  className="h-full"
+                  style={{ background: "var(--accent)", opacity: 0.55 }}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${bank.pct}%` }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 1.1, ease: EASE, delay: 0.2 + i * 0.15 }}
+                />
               </div>
             </div>
           ))}
@@ -91,20 +153,40 @@ function SessaoPreview() {
           <span className="font-mono text-[0.5rem] uppercase tracking-widest" style={{ color: "var(--muted)" }}>
             Watchlist do casal
           </span>
-          <span className="font-mono text-[0.5rem]" style={{ color: "var(--accent)", opacity: 0.7 }}>
-            47 filmes
+          <span className="font-mono text-[0.5rem] tabular-nums" style={{ color: "var(--accent)", opacity: 0.7 }}>
+            <CountUp value={47} duration={1.6} /> filmes
           </span>
         </div>
 
         <div className="grid grid-cols-4 gap-1.5">
           {posters.map((color, i) => (
-            <div key={i} className="aspect-[2/3] rounded-sm" style={{ background: color, border: "1px solid var(--border)" }} />
+            <m.div
+              key={i}
+              className="aspect-[2/3] rounded-sm"
+              style={{ background: color, border: "1px solid var(--border)" }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, ease: EASE, delay: 0.1 + i * 0.05 }}
+            />
           ))}
         </div>
 
         <div className="flex items-center justify-between border-t pt-3" style={{ borderColor: "var(--border)" }}>
           <div className="flex gap-0.5">
-            {[1, 2, 3, 4].map((s) => <span key={s} className="text-[0.65rem]" style={{ color: "var(--accent)" }}>★</span>)}
+            {[1, 2, 3, 4].map((s, i) => (
+              <m.span
+                key={s}
+                className="text-[0.65rem]"
+                style={{ color: "var(--accent)" }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 0.35, ease: EASE, delay: 0.5 + i * 0.09 }}
+              >
+                ★
+              </m.span>
+            ))}
             <span className="text-[0.65rem]" style={{ color: "var(--border-strong)" }}>★</span>
           </div>
           <span className="font-mono text-[0.5rem]" style={{ color: "var(--muted)" }}>Avaliação média</span>
@@ -124,6 +206,7 @@ type PersonalProject = {
   challenge: string;
   features: string[];
   stack: string[];
+  status: string;
   projetoUrl: string;
   codigoUrl?: string;
   caseStudyUrl: string;
@@ -149,6 +232,7 @@ const personalProjects: PersonalProject[] = [
       "Sincronização em tempo real",
     ],
     stack: ["React", "TypeScript", "Firebase", "Tailwind", "Framer Motion", "PWA"],
+    status: "No ar",
     projetoUrl: "https://minhas-contas-831fb.web.app/",
     caseStudyUrl: "/projetos/minhas-contas",
     Preview: MinhasContasPreview,
@@ -170,6 +254,7 @@ const personalProjects: PersonalProject[] = [
       "Estatísticas do casal",
     ],
     stack: ["React", "Vite", "Firebase", "PWA"],
+    status: "No ar",
     projetoUrl: "https://sess-80b2c.web.app/",
     caseStudyUrl: "/projetos/sessao",
     Preview: SessaoPreview,
@@ -245,22 +330,32 @@ const clientProjects: ClientProject[] = [
   },
 ];
 
-/* ─── Personal Project Card — um por linha, largura total ───────── */
+/* ─── Personal Project Card ─────────────────────────────────────── */
 
 function PersonalCard({ project }: { project: PersonalProject }) {
   const { Preview } = project;
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+    <m.article
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: EASE }}
       viewport={{ once: true, amount: 0.05 }}
-      className="border border-[var(--border)] bg-[var(--surface)] transition-colors duration-200 hover:border-[var(--border-strong)]"
+      className="border border-[var(--border)] bg-[var(--surface)] transition-colors duration-300 hover:border-[var(--border-strong)]"
     >
-      {/* Header bar */}
-      <div className="flex items-center justify-between border-b border-[var(--border)] px-8 py-4 md:px-12">
-        <span className="mono text-xs tracking-[0.15em]">{project.id}</span>
+      {/* Header bar — id, status e links */}
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] px-8 py-4 md:px-12">
+        <div className="flex items-center gap-5">
+          <span className="mono text-xs tracking-[0.15em]">{project.id}</span>
+          <span className="flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-[0.12em]" style={{ color: "var(--status)" }}>
+            <span
+              className="inline-block h-[5px] w-[5px] rounded-full"
+              style={{ background: "var(--status)", animation: "pulse-status 2.5s ease-in-out infinite" }}
+              aria-hidden
+            />
+            {project.status}
+          </span>
+        </div>
         <div className="flex items-center gap-5">
           <a
             href={project.projetoUrl}
@@ -287,14 +382,20 @@ function PersonalCard({ project }: { project: PersonalProject }) {
         </div>
       </div>
 
-      {/* Main: texto à esquerda, mockup à direita */}
+      {/* Main: narrativa à esquerda, mockup vivo à direita */}
       <div className="grid gap-10 p-8 md:grid-cols-[1fr_360px] md:gap-16 md:p-14">
-        {/* Left — narrativa */}
-        <div className="flex flex-col">
-          <h3 className="heading" style={{ fontSize: "clamp(1.75rem,2.8vw,2.25rem)" }}>
+        <m.div
+          variants={colVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="flex flex-col"
+        >
+          <m.h3 variants={itemVariants} className="heading" style={{ fontSize: "clamp(1.75rem,2.8vw,2.25rem)" }}>
             {project.name}
-          </h3>
-          <p
+          </m.h3>
+          <m.p
+            variants={itemVariants}
             className="mt-3"
             style={{
               fontFamily: "var(--font-instrument-serif)",
@@ -304,35 +405,35 @@ function PersonalCard({ project }: { project: PersonalProject }) {
             }}
           >
             {project.tagline}
-          </p>
+          </m.p>
 
-          <p
-            className="mt-8 max-w-[52ch]"
-            style={{ fontFamily: "var(--font-body)", fontSize: "0.9375rem", lineHeight: "1.75", color: "var(--text-2)" }}
-          >
+          <m.p variants={itemVariants} className="body mt-8 max-w-[52ch] text-[0.9375rem]">
             {project.description}
-          </p>
+          </m.p>
 
-          <div className="mt-10 border border-[var(--border)] p-6" style={{ background: "var(--accent-bg)" }}>
+          <m.div
+            variants={itemVariants}
+            className="mt-10 border border-[var(--border)] border-l-2 border-l-[var(--accent)] p-6"
+            style={{ background: "var(--accent-bg)" }}
+          >
             <p className="label-accent mb-3">Desafio técnico</p>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: "0.875rem", lineHeight: "1.75", color: "var(--text-2)" }}>
-              {project.challenge}
-            </p>
-          </div>
+            <p className="body text-[0.875rem]">{project.challenge}</p>
+          </m.div>
 
-          <div className="mt-10 flex flex-wrap gap-3">
+          <m.div variants={itemVariants} className="mt-10 flex flex-wrap gap-3">
             <a href={project.projetoUrl} target="_blank" rel="noreferrer" className="btn-primary">
               Ver produto ↗
             </a>
             <Link href={project.caseStudyUrl} className="btn-ghost">
               Estudo de caso →
             </Link>
-          </div>
-        </div>
+          </m.div>
+        </m.div>
 
-        {/* Right — mockup + stack + features */}
         <div className="flex flex-col gap-8">
-          <Preview />
+          <TiltPreview>
+            <Preview />
+          </TiltPreview>
 
           <div>
             <p className="label mb-3">Stack</p>
@@ -347,11 +448,7 @@ function PersonalCard({ project }: { project: PersonalProject }) {
             <p className="label mb-3">Features</p>
             <ul className="space-y-2.5">
               {project.features.map((f) => (
-                <li
-                  key={f}
-                  className="flex items-start gap-2.5"
-                  style={{ fontFamily: "var(--font-body)", fontSize: "0.875rem", lineHeight: "1.6", color: "var(--text-2)" }}
-                >
+                <li key={f} className="body flex items-start gap-2.5 text-[0.875rem] leading-[1.6]">
                   <span style={{ color: "var(--accent)", marginTop: "2px", flexShrink: 0 }}>→</span>
                   {f}
                 </li>
@@ -360,7 +457,7 @@ function PersonalCard({ project }: { project: PersonalProject }) {
           </div>
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -370,29 +467,44 @@ function ClientAccordion({ project }: { project: ClientProject }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <article className="border-b border-[var(--border)]">
+    <article className="relative border-b border-[var(--border)]">
+      {/* Barra accent que desenha quando o caso abre */}
+      <m.span
+        className="absolute left-0 top-0 z-10 h-full w-[2px] origin-top"
+        style={{ background: "var(--accent)" }}
+        initial={false}
+        animate={{ scaleY: open ? 1 : 0 }}
+        transition={{ duration: 0.45, ease: EASE }}
+        aria-hidden
+      />
+
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-start justify-between gap-4 p-6 text-left transition-colors hover:bg-[var(--surface)] md:items-center md:p-7"
+        className="group flex w-full items-start justify-between gap-4 p-6 text-left transition-colors hover:bg-[var(--surface)] md:items-center md:p-7"
         type="button"
         aria-expanded={open}
       >
         <div className="flex items-center gap-5">
           <span className="mono text-xs tracking-[0.15em]">{project.id}</span>
-          <h3 className="heading text-[1.05rem] md:text-[1.2rem]">{project.name}</h3>
+          <h3
+            className="heading text-[1.05rem] transition-[color,transform] duration-300 group-hover:translate-x-1 md:text-[1.2rem]"
+            style={{ color: open ? "var(--accent)" : undefined }}
+          >
+            {project.name}
+          </h3>
         </div>
         <div
           className="flex shrink-0 items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em]"
           style={{ color: "var(--muted)" }}
         >
-          <motion.span
+          <m.span
             animate={{ rotate: open ? 45 : 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25, ease: EASE }}
             className="text-base leading-none"
             style={{ color: open ? "var(--accent)" : undefined }}
           >
             +
-          </motion.span>
+          </m.span>
           {open ? "Fechar" : "Abrir caso"}
         </div>
       </button>
@@ -432,7 +544,7 @@ function ClientAccordion({ project }: { project: ClientProject }) {
 
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div
+          <m.div
             key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -450,15 +562,20 @@ function ClientAccordion({ project }: { project: ClientProject }) {
                 {project.entrega && <Field title="Entrega" text={project.entrega} />}
               </div>
 
-              <div className="border border-[var(--border)] p-8">
+              <m.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.5, ease: EASE }}
+                className="h-fit border border-[var(--border)] p-8"
+              >
                 <p className="label-accent">Resultado</p>
                 <p className="mt-2 font-sans text-5xl font-extrabold" style={{ color: "var(--accent)" }}>
                   {project.metric}
                 </p>
                 <p className="body mt-5">{project.resultado}</p>
-              </div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </article>
@@ -480,21 +597,12 @@ export default function Projetos() {
   return (
     <section id="projetos" className="section bg-[var(--bg)]">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          <p className="label-accent">Produtos</p>
-          <h2 className="heading mt-4" style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}>
-            O que eu construo quando tenho um problema.
-          </h2>
-          <p className="body mt-5 max-w-[52ch]">
-            Antes de qualquer cliente, construo para mim. Os produtos abaixo nasceram de
-            necessidades reais — e mostram como eu penso quando tenho total autonomia de decisão.
-          </p>
-        </motion.div>
+        <SectionHeader
+          index="01 / 05"
+          label="Produtos"
+          title="O que eu construo quando tenho um problema."
+          lead="Antes de qualquer cliente, construo para mim. Os produtos abaixo nasceram de necessidades reais — e mostram como eu penso quando tenho total autonomia de decisão."
+        />
 
         <div className="mt-14 flex flex-col gap-px bg-[var(--border)]">
           {personalProjects.map((project) => (
@@ -502,18 +610,13 @@ export default function Projetos() {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true, amount: 0.2 }}
-          className="mt-24"
-        >
-          <p className="label-accent">Trabalhos para clientes</p>
-          <h2 className="heading mt-4" style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}>
-            Casos reais, impacto mensurável.
-          </h2>
-        </motion.div>
+        <div className="mt-24">
+          <SectionHeader
+            index="02 / 05"
+            label="Trabalhos para clientes"
+            title="Casos reais, impacto mensurável."
+          />
+        </div>
 
         <div className="mt-10 border border-[var(--border)] border-b-0">
           {clientProjects.map((project) => (
