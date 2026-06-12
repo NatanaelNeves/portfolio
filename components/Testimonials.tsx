@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 // TODO: Substitua os placeholders abaixo por depoimentos reais.
 // Solicite ao gestor do Pequeno Nazareno e à Vitória Dandara.
@@ -34,7 +34,7 @@ export default function Testimonials() {
   return (
     <section className="section bg-[var(--bg)]">
       <div className="container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -54,7 +54,7 @@ export default function Testimonials() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div>
-                  <p className="font-sans text-[0.875rem] font-700" style={{ color: "var(--text)", fontWeight: 700 }}>
+                  <p className="font-sans text-[0.875rem]" style={{ color: "var(--text)", fontWeight: 700 }}>
                     {t.name}
                   </p>
                   <p className="label mt-0.5">
@@ -64,7 +64,7 @@ export default function Testimonials() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

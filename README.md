@@ -29,19 +29,33 @@ app/
     sessao/           # Case study — Sessão
 
 components/
-  Navbar.tsx          # Header fixo com status de disponibilidade
-  Hero.tsx            # Seção principal
-  Projetos.tsx        # Produtos pessoais + cases de cliente
-  Processo.tsx        # Pipeline de trabalho
-  Marquee.tsx         # Stack strip
-  Sobre.tsx           # Trajetória e timeline
-  CTAFinal.tsx        # Seção de contato com formulário WhatsApp
+  motion.tsx          # Primitives de animação: EASE, Reveal, MaskLines, SectionHeader, Magnetic, CountUp
+  Navbar.tsx          # Header com menu mobile, seção ativa e hide-on-scroll
+  Hero.tsx            # Abertura: mask reveal, spotlight, parallax, relógio BRT, CTAs magnéticos
+  Projetos.tsx        # Produtos com previews animados e tilt 3D + cases de cliente
+  Processo.tsx        # Pipeline com espinha que desenha no scroll
+  Marquee.tsx         # Marquee infinito da stack (CSS puro, pausa no hover)
+  Sobre.tsx           # Trajetória com timeline scroll-linked
+  CTAFinal.tsx        # Contato com formulário WhatsApp em painel
   ClientStrip.tsx     # Faixa de clientes
   Testimonials.tsx    # Depoimentos (desativado até coletar reais)
-  Footer.tsx
-  CustomCursor.tsx
-  MotionProvider.tsx
+  Footer.tsx          # Assinatura "// end of log" com nome em outline
+  CustomCursor.tsx    # Cursor dot + anel com lerp via rAF (para quando ocioso)
+  ScrollProgress.tsx  # Linha de progresso de leitura no topo
+  MotionProvider.tsx  # LazyMotion (bundle reduzido) + reducedMotion="user"
 ```
+
+## Motion
+
+Toda animação compartilha a mesma curva (`EASE` em `components/motion.tsx`) e usa
+apenas `transform`/`opacity`. O framer-motion é carregado via `LazyMotion` com
+componentes `m` (modo `strict`) — usar `motion.div` direto quebra em runtime de
+propósito, para manter o bundle pequeno. `prefers-reduced-motion` é respeitado
+globalmente (MotionConfig + media query no CSS).
+
+> **Atenção:** não adicione resets CSS fora de `@layer` no `globals.css`. O
+> preflight do Tailwind v4 vive em `@layer base`; um reset unlayered vence as
+> utilities e zera todo `p-*`/`m-*` silenciosamente.
 
 ## Design tokens
 
